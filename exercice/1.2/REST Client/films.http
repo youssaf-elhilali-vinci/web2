@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/films?minimum-duration=120
+GET http://localhost:3000/films?minimum-duration=gfhgfhhf
 ###
 GET http://localhost:3000/films/2
  b

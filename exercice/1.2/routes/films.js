@@ -27,7 +27,11 @@ const FILMS = [{
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  const minimumFilmDuration = req?.query?.['minimum-duration'] ? Number(req.query['minimum-duration']) : undefined; // si la premiere partie est true alors la variable minimumDurationFilm est egale à la deuxiemem partie( celle après le point d'interrogation) sinon elle est undifined
+  
+  const minimumFilmDuration =  req?.query?.['minimum-duration'] ? Number(req.query['minimum-duration']) : undefined; // si la premiere partie est true alors la variable minimumDurationFilm est egale à la deuxiemem partie( celle après le point d'interrogation) sinon elle est undifined
+  if (minimumFilmDuration <= 0 ) return res.sendStatus(400);
+
+  if (isNaN(minimumFilmDuration)) return res.sendStatus(400);
 
   if (minimumFilmDuration === undefined)
     res.json(FILMS);
@@ -47,6 +51,8 @@ router.get('/:id', (req, res, next) => {
 
   const indexOfFilmFound = FILMS.findIndex((film) => film.id == req.params.id);
 
+  console.log(FILMS.length);
+
   if (indexOfFilmFound < 0 ) return res.sendStatus(404);
 
 
@@ -55,10 +61,19 @@ router.get('/:id', (req, res, next) => {
 
 // CREATION new film 
 router.post('/', (req, res, next) => {
+
   console.log(req.body.title);
   console.log(req.body.duration);
   console.log(req.body.budget);
   console.log(req.body.link);
+
+  const titleOfFilm = req?.body?.title
+  
+  for (let i=0; i< FILMS.length; i++){
+    if (FILMS[i].title == titleOfFilm)
+    return res.sendStatus(409);
+  }
+  
 
   const lastItemIndex = FILMS?.length !== 0 ? FILMS.length - 1 : undefined;
   const lastId = lastItemIndex !== undefined ? FILMS[lastItemIndex]?.id : 0;
