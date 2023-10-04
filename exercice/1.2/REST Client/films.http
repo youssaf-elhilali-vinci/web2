@@ -13,3 +13,7 @@ Content-Type: application/json
     "budget": 115,
     "link":"https://en.wikipedia.org/wiki/Star_Wars:_Episode_I_%E2%80%93_The_Phantom_Menace"
 }
+
+### Delete pizza identified by 2
+DELETE http://localhost:3000/films/2
+
