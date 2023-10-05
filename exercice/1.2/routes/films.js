@@ -27,20 +27,19 @@ const FILMS = [
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  const minimumFilmDuration = req?.query?.["minimum-duration"]
-    ? Number(req.query["minimum-duration"])
-    : undefined; // si la premiere partie est true alors la variable minimumDurationFilm est egale à la deuxiemem partie( celle après le point d'interrogation) sinon elle est undifined
+  const minimumFilmDuration = req?.query?.["minimum-duration"] ? Number(req.query["minimum-duration"]) : undefined; // si la premiere partie est true alors la variable minimumDurationFilm est egale à la deuxiemem partie( celle après le point d'interrogation) sinon elle est undifined
   if (minimumFilmDuration <= 0) return res.sendStatus(400);
 
-  if (isNaN(minimumFilmDuration)) return res.sendStatus(400);
+  
 
-  if (minimumFilmDuration === undefined) res.json(FILMS);
-
+  if (minimumFilmDuration === undefined || isNaN(minimumFilmDuration)) return res.json(FILMS);
+  
   const filmsReachingMinimumDuration = FILMS.filter(
     (film) => film.duration >= minimumFilmDuration
   );
 
   res.json(filmsReachingMinimumDuration);
+
 });
 
 // Read the film identified by an id in the FILMS
@@ -96,5 +95,63 @@ router.post("/", (req, res, next) => {
 
   res.json(FILMS);
 });
+
+//DELETE one
+router.delete("/:id", (req, res, next) => {
+  const id = FILMS.findIndex((film) => film.id == req.params.id);
+
+  if (id < 0 ) return res.sendStatus(404); 
+  
+  const itemsRemovedFromFILMS = FILMS.splice(id, 1); //pourquoi mettre le 1 aussi ??
+  const itemRemoved = itemsRemovedFromFILMS[0];
+
+  res.json(itemRemoved);
+
+});
+
+// Update a pizza based on its id and new values for its parameters
+router.patch('/:id', (req, res) => {
+
+  const title = req?.body?.title;
+  const content = req?.body?.content;
+
+
+  if ((!title && !content) || title?.length === 0 || content?.length === 0) return res.sendStatus(400);
+
+  const foundIndex = FILMS.findIndex((films) => films.id == req.params.id);
+
+  if (foundIndex < 0) return res.sendStatus(404);
+
+  const updatedPizza = {...FILMS[foundIndex], ...req.body};
+
+  FILMS[foundIndex] = updatedPizza;
+
+  res.json(updatedPizza);
+});
+
+router.put('/:id', (req, res) => {
+
+  const newId = req?.body?.title;
+  const newTitle = req?.body?.title;
+  const newDuration = req?.body?.duration; 
+  const newBudget = req?.body?.budget;
+  const newLink = req?.body?.link;
+
+  if (!newTitle || !newDuration || !newBudget ||!newLink ) return res.sendStatus(400);
+
+  const foundID = FILMS.foundIndex((films) => films.id == req.params.id);
+
+  for (let i = 0; i < FILMS.length; i++) {
+    if (FILMS[i].id == newId)
+    return res.sendStatus(409);
+  }
+  
+
+  res.json(updatedPizza);
+});
+
+
+
+
 
 module.exports = router;

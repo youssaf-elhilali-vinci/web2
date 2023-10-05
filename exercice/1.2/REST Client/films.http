@@ -1,19 +1,34 @@
 ###
-GET http://localhost:3000/films?minimum-duration=gfhgfhhf
+GET http://localhost:3000/films
+
+###
+GET http://localhost:3000/films?minimum-duration=120
+
 ###
 GET http://localhost:3000/films/2
- b
+
 ### creat film
 POST http://localhost:3000/films
 Content-Type: application/json
 
 {
-    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "title":"ethrsth",
     "duration": 136,
     "budget": 115,
     "link":"https://en.wikipedia.org/wiki/Star_Wars:_Episode_I_%E2%80%93_The_Phantom_Menace"
 }
 
+
 ### Delete pizza identified by 2
-DELETE http://localhost:3000/films/2
+DELETE http://localhost:3000/films/1
+
+### Update the pizza identified by 6
+PATCH http://localhost:3000/films/3
+Content-Type: application/json
+
+{
+    "title":"Magic Green 2"
+}
+
+
 
