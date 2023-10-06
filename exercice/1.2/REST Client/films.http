@@ -20,7 +20,7 @@ Content-Type: application/json
 
 
 ### Delete pizza identified by 2
-DELETE http://localhost:3000/films/1
+DELETE http://localhost:3000/films/3
 
 ### Update the pizza identified by 6
 PATCH http://localhost:3000/films/3
