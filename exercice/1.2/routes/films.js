@@ -139,15 +139,28 @@ router.put('/:id', (req, res) => {
 
   if (!newTitle || !newDuration || !newBudget ||!newLink ) return res.sendStatus(400);
 
-  const foundID = FILMS.foundIndex((films) => films.id == req.params.id);
 
-  for (let i = 0; i < FILMS.length; i++) {
-    if (FILMS[i].id == newId)
-    return res.sendStatus(409);
-  }
+  const foundID = FILMS.findIndex((films) => films.id == req.params.id);
+
+  if  (foundID < 0 ) {
+    const newFilm =  {newId, newTitle, newDuration, newBudget, newLink};
+    FILMS.push(newFilm);
+    return res.json(newFilm);
+  };
   
 
-  res.json(updatedPizza);
+  const filmPriorToChange = FILMS[foundID];
+  const objectContainingPropertiesToBeUpdated = req.body;
+
+  const updatedFilm = {
+    ...filmPriorToChange,
+    ...objectContainingPropertiesToBeUpdated,
+  };
+
+  FILMS[foundID] = updatedFilm;
+
+
+  res.json(updatedFilm);
 });
 
 
