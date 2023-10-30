@@ -1,32 +1,42 @@
+let maxTime = 5; //en seconde
+const expectedClick = 10;
+let startTime;
+let counttClicks;
+let timeReference;
+
 const btnClick = document.querySelector("#btn-click"); //'#' pour un id et '.' pour une class
 const btnTime = document.querySelector("#btn-time");//quand on met rien c'est pour les balise
 
 
-btnClick.addEventListener("mouse-over",startTime );
-btnTime.addEventListener("click", clearAlert);
 
-btnClick.addEventListener("click", countClick)
-
+btnClick.addEventListener('mouseenter', startCounter );
+btnTime.addEventListener('click',clickHandler );
 
 
-let timeoutID;
-const now = new Date();
-const delayInSeconds = now.toLocaleTimeString();
-
- --fyfyf
-//démarre le temps
-function startTime() {
-    timeoutID = setTimeout(() => {
-        alert(`You asked for this popup ${delayInSeconds}s ago!`);
-    }, 5000);
+function startCounter() {
+    startTime = new Date();
+    timeReference = setTimeout(printLoss, maxTime * 1000);
 }
 
-//compte les click
-function countClick() {
-    
+function clickHandler() {
+    ++counttClicks;
+    if (counttClicks === expectedClick){
+        clearTimeout(timeReference);
+        win();
+    }
 }
 
-function clearAlert() {
-    clearTimeout(timeoutID);
+function printLoss() {
+    const timeSpent = new Date().getTime() - startTime.getTime();
+    button.style.display = 'none';
+    message.innerHTML = `Game over, you did not click ${expectedClick} times within ${maxTime}s!
+      You clicked ${counttClicks} times`;
   }
+  
+  function win() {
+    const timeSpent = new Date().getTime() - startTime.getTime();
+    button.style.display = 'none';
+    message.innerHTML = `You win ! you clicked ${expectedClick} times within ${timeSpent}s!`;
+  }
+
 

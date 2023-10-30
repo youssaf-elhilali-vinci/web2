@@ -1,5 +1,5 @@
 var express = require('express');
-const { serialize, parse }  =  require(' ../../utils/json');
+const { serialize, parse }  =  require('../../../utils/json');
 var router = express.Router();
 
 const jsonDbPath = __dirname + '/../data/pizza.json';
@@ -30,16 +30,20 @@ const FILMS = [
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
+
+  const film = parse(jsonDbPath, FILMS);
+  
   const minimumFilmDuration = req?.query?.["minimum-duration"] ? Number(req.query["minimum-duration"]) : undefined; // si la premiere partie est true alors la variable minimumDurationFilm est egale à la deuxiemem partie( celle après le point d'interrogation) sinon elle est undifined
   if (minimumFilmDuration <= 0) return res.sendStatus(400);
 
-  
+   
 
-  if (minimumFilmDuration === undefined || isNaN(minimumFilmDuration)) return res.json(FILMS);
+  if (minimumFilmDuration === undefined || isNaN(minimumFilmDuration)) return res.json(film);
   
-  const filmsReachingMinimumDuration = FILMS.filter(
+  const filmsReachingMinimumDuration = film.filter(
     (film) => film.duration >= minimumFilmDuration
   );
+
 
   res.json(filmsReachingMinimumDuration);
 
@@ -49,15 +53,14 @@ router.get("/", function (req, res, next) {
 router.get("/:id", (req, res, next) => {
   console.log(`GET /films/${req.params.id}`);
   
-  //const id = req?.params?.id !== 'number' ? undefined : req.params.id;
+  const film = parse(jsonDbPath, FILMS);
 
-  const indexOfFilmFound = FILMS.findIndex((film) => film.id == req.params.id);
+  const indexOfFilmFound = film.findIndex((film) => film.id == req.params.id);
 
-  console.log(FILMS.length);
 
   if (indexOfFilmFound < 0) return res.sendStatus(404);
 
-  res.json(FILMS[indexOfFilmFound]);
+  res.json(film[indexOfFilmFound]);
 });
 
 // CREATION new film
@@ -78,12 +81,15 @@ router.post("/", (req, res, next) => {
 
   const titleOfFilm = req?.body?.title;
 
+  
+
   for (let i = 0; i < FILMS.length; i++) {
-    if (FILMS[i].title == titleOfFilm) return res.sendStatus(409);
+    if (FILMS[i].title === titleOfFilm) return res.sendStatus(409);
   }
 
-  const lastItemIndex = FILMS?.length !== 0 ? FILMS.length - 1 : undefined;
-  const lastId = lastItemIndex !== undefined ? FILMS[lastItemIndex]?.id : 0;
+  const film = parse(jsonDbPath, FILMS); 
+  const lastItemIndex = film?.length !== 0 ? film.length - 1 : undefined;
+  const lastId = lastItemIndex !== undefined ? film[lastItemIndex]?.id : 0;
   const nextId = lastId + 1;
 
   const newFilm = {
@@ -94,19 +100,25 @@ router.post("/", (req, res, next) => {
     link: link,
   };
 
-  FILMS.push(newFilm);
+  film.push(newFilm);
 
-  res.json(FILMS);
+  serialize(jsonDbPath, film); // serialize pour faire persister les donnée et , jsondbPath pour signaler où et film pour dire quel élément à été modifié
+
+  res.json(FILMS[id]);
 });
 
 //DELETE one
 router.delete("/:id", (req, res, next) => {
-  const id = FILMS.findIndex((film) => film.id == req.params.id);
+  const film = parse(jsonDbPath, FILMS);
+
+  const id = film.findIndex((film) => film.id == req.params.id);
 
   if (id < 0 ) return res.sendStatus(404); 
   
-  const itemsRemovedFromFILMS = FILMS.splice(id, 1); //pourquoi mettre le 1 aussi ??
+  const itemsRemovedFromFILMS = film.splice(id, 1); //pourquoi mettre le 1 aussi ??
   const itemRemoved = itemsRemovedFromFILMS[0];
+
+  serialize(jsonDbPath, film);
 
   res.json(itemRemoved);
 
@@ -114,6 +126,7 @@ router.delete("/:id", (req, res, next) => {
 
 // Update a pizza based on its id and new values for its parameters
 router.patch('/:id', (req, res) => {
+  const film = parse(jsonDbPath, FILMS);//charger tte les données dans une mémoire vive
 
   const title = req?.body?.title;
   const content = req?.body?.content;
@@ -121,13 +134,15 @@ router.patch('/:id', (req, res) => {
 
   if ((!title && !content) || title?.length === 0 || content?.length === 0) return res.sendStatus(400);
 
-  const foundIndex = FILMS.findIndex((films) => films.id == req.params.id);
+  const foundIndex = film.findIndex((films) => films.id == req.params.id);
 
   if (foundIndex < 0) return res.sendStatus(404);
 
-  const updatedPizza = {...FILMS[foundIndex], ...req.body};
+  const updatedPizza = {...film[foundIndex], ...req.body};
 
-  FILMS[foundIndex] = updatedPizza;
+  film[foundIndex] = updatedPizza;
+
+  serialize(jsonDbPath, film);
 
   res.json(updatedPizza);
 });

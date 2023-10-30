@@ -7,14 +7,14 @@ GET http://localhost:3000/films
 GET http://localhost:3000/films?minimum-duration=120
 
 ###
-GET http://localhost:3000/films/2
+GET http://localhost:3000/films/6
 
 ### creat film
 POST http://localhost:3000/films
 Content-Type: application/json
 
 {
-    "title":"ethrsth",
+    "title":"FILM 7",
     "duration": 136,
     "budget": 115,
     "link":"https://en.wikipedia.org/wiki/Star_Wars:_Episode_I_%E2%80%93_The_Phantom_Menace"
