@@ -50,9 +50,20 @@
 
     function renderToAboutPage() {
         
-        const backPage = `<h1>L'auteur de cette page est Youssaf El hilali, 
-        étudiant dans une haute école dénomé Institut Léonard de Vinci</h1>
-        <button id="back">Back</button>
+        const backPage = `
+        <div class="container text-center">
+        
+        <h1>L'auteur de cette page est Youssaf El hilali, 
+            étudiant dans une haute école dénomé Institut Léonard de Vinci
+        </h1>
+     
+            <div class="row mb-3">
+                <div class="col">
+                    <button id="back" class="btn btn-dark">About</button>
+                </div>
+            </div>
+        </div>
+        
         `
         mainWrapper.innerHTML = backPage
         
@@ -60,7 +71,7 @@
         btnForBack.addEventListener("click", renderToHomePage)
 
     }
-
+ 
 
 
     
