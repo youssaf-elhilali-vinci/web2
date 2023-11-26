@@ -35,6 +35,9 @@ const Navbar = () => {
               </li>  
               <li class="nav-item">
                 <a class="nav-link" href="#" data-uri="/viewMovie">view movie</a>
+              </li>  
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-uri="/filmRegister">film who are register</a>
               </li>                        
             </ul>
           </div>

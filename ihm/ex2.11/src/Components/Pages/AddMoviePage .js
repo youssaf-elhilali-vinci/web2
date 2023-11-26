@@ -1,4 +1,5 @@
 import { clearPage } from "../../utils/render";
+import Navigate from "../Router/Navigate";
 
 const AddMoviePage  = () => {
     clearPage()
@@ -51,6 +52,7 @@ function formToAddMovie(){
     
     // eslint-disable-next-line no-console
     console.log("voici le nouveau film : " , movieToBeCreated)
+    Navigate('/filmRegister')
 });
 
 

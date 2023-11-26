@@ -1,4 +1,3 @@
-import { clearPage } from "../../utils/render";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../stylesheets/main.css';
 
@@ -9,7 +8,6 @@ import SNOWFALL from "../../img/snowfall.jpg"
 const mainWrapper = document.querySelector('main');
 
 const viewMoviePage  = () => {
-    clearPage()
     renderToHomePage()
 }
 
